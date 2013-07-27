@@ -17,7 +17,7 @@ import android.widget.EditText;
 
 public class CrimeFragment extends Fragment {
 
-	public static final String EXTRA_CRIME_IDKEY = "com.bignerdranch.android.criminalintent.crime_id";
+	public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 	
 	private Crime mCrime;
 	private EditText mTitleField;
@@ -27,7 +27,7 @@ public class CrimeFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_CRIME_IDKEY);
+		UUID crimeId = (UUID) getActivity().getIntent().getSerializableExtra(EXTRA_CRIME_ID);
 		mCrime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
 	}
 	

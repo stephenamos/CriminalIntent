@@ -43,5 +43,14 @@ public class Crime {
 	public boolean isSolved() {
 		return mSolved;
 	}
+	
+	/**
+	 * The default implementation of ArrayAdapter<t>.getView(...) relies on toString()
+	 * (See CrimeListFragment class)
+	 */
+	@Override
+	public String toString() {
+		return mTitle;
+	}
 
 }

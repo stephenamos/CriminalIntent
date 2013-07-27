@@ -1,7 +1,6 @@
 package com.bignerdranch.android.criminalintent;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import android.content.Context;
@@ -28,7 +27,7 @@ public class CrimeLab {
 
 	public static CrimeLab getInstance(Context c) {
 
-		if (sCrimeLab != null) {
+		if (sCrimeLab == null) {
 			sCrimeLab = new CrimeLab(c.getApplicationContext());
 		}
 

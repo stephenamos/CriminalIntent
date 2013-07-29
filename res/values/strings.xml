@@ -12,5 +12,7 @@
     <string name="crimes_title">Crimes</string>
     
     <string name="date_picker_title">Date of crime:</string>
+    <string name="time_picker_title">Time of crime:</string>
+    <string name="time_picker_button">Set hour and minute</string>
     
 </resources>

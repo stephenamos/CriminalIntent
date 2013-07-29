@@ -122,7 +122,9 @@ public class CrimeFragment extends Fragment {
 	
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK) { return; }
+		if (resultCode != Activity.RESULT_OK) { 
+			openTimePickerDialog();
+		}
 		if (requestCode == REQUEST_DATE) {
 			Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 			mCrime.setDate(date);
@@ -132,6 +134,13 @@ public class CrimeFragment extends Fragment {
 	
 	private void updateButtonData() {
 		mDateButton.setText(mCrime.getDate().toString());
+	}
+	
+	private void openTimePickerDialog() {
+		FragmentManager fm = getActivity().getSupportFragmentManager();
+		TimePickerFragment dialog = TimePickerFragment.newInstance(mCrime.getDate());
+		dialog.setTargetFragment(CrimeFragment.this, REQUEST_DATE);
+		dialog.show(fm, DIALOG_TIME);
 	}
 	
 }

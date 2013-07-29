@@ -15,16 +15,12 @@ public class CrimeLab {
 	private CrimeLab(Context appContext) { 
 		mAppContext = appContext;
 		mCrimes = new ArrayList<Crime>();
-
-		//Populate list of crimes with 100 arbitrarily created crimes where every other crime is solved
-		for (int i = 0; i < 100; i++) {
-			Crime c = new Crime();
-			c.setTitle("Crime #" + i);
-			c.setSolved(i % 2 == 0); //Every other crime
-			mCrimes.add(c);
-		}
 	}
 
+	public void addCrime(Crime crime) {
+		mCrimes.add(crime);
+	}
+	
 	public static CrimeLab getInstance(Context c) {
 
 		if (sCrimeLab == null) {

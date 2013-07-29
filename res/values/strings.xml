@@ -22,4 +22,6 @@
     <string name="subtitle">If you see something, say something.</string>
     <string name="delete_crime">Delete</string>
     
+    <string name="no_crimes">There are currently no entries.  You should make one!</string>
+    
 </resources>

@@ -2,6 +2,7 @@ package com.bignerdranch.android.criminalintent;
 
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -59,8 +60,9 @@ public class CrimeListFragment extends ListFragment {
 
 	}
 
+	@TargetApi(11)
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) { //menu items
 		switch (item.getItemId()) {
 			case R.id.menu_item_new_crime:
 				Crime crime = new Crime();
@@ -70,6 +72,15 @@ public class CrimeListFragment extends ListFragment {
 				intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getId());
 				
 				startActivityForResult(intent, 0);
+				return true;
+			case R.id.menu_item_show_subtitle:
+				if (getActivity().getActionBar().getSubtitle() == null) {
+					getActivity().getActionBar().setSubtitle(R.string.subtitle);	
+					item.setTitle(R.string.hide_subtitle);
+				} else {
+					getActivity().getActionBar().setSubtitle(null);
+					item.setTitle(R.string.show_subtitle);
+				}
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);

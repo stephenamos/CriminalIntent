@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
-import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -22,6 +24,8 @@ public class CrimeListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setHasOptionsMenu(true); //Lets the FragmentManager know that CrimeListFragment needs to receive options menu callbacks.
+		
 		getActivity().setTitle(R.string.crimes_title);
 		 //getActivity() is a convenience method provided by list fragment that returns the activity hosting this fragment
 
@@ -46,6 +50,19 @@ public class CrimeListFragment extends ListFragment {
 		i.putExtra(CrimeFragment.EXTRA_CRIME_ID, c.getId());
 		
 		startActivity(i);
+	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.fragment_crime_list, menu);
+		
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		
+		return false;
 	}
 	
 	private class CrimeAdapter extends ArrayAdapter<Crime> {

@@ -33,7 +33,7 @@ public class CrimeListFragment extends ListFragment {
 		setHasOptionsMenu(true); //Lets the FragmentManager know that CrimeListFragment needs to receive options menu callbacks.
 		setRetainInstance(true); //retain fragment data in between rotations
 		mSubtitleVisible = false;
-		
+
 		getActivity().setTitle(R.string.crimes_title);
 		//getActivity() is a convenience method provided by list fragment that returns the activity hosting this fragment
 
@@ -53,30 +53,30 @@ public class CrimeListFragment extends ListFragment {
 			mAddCrimeButton = (Button) view.findViewById(R.id.empty_list_button);
 			mAddCrimeButton.setVisibility(View.VISIBLE);
 			mAddCrimeButton.setEnabled(true);
-			
+
 			mAddCrimeButton.setOnClickListener(new View.OnClickListener() {
-				
+
 				@Override
 				public void onClick(View v) {
 					addNewCrime();
 				}
 			});
-			
+
 		} else {
-//			view = super.onCreateView(inflater, container, savedInstanceState);
+			//			View view = super.onCreateView(inflater, container, savedInstanceState);
 			view = inflater.inflate(R.layout.fragment_crimelist, container, false);	
-			
+
 			mAddCrimeButton = (Button) view.findViewById(R.id.empty_list_button);
 			mAddCrimeButton.setVisibility(View.GONE);
 			mAddCrimeButton.setEnabled(false);
 		}
-		
+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (mSubtitleVisible) {
 				getActivity().getActionBar().setSubtitle(R.string.subtitle);
 			}
 		}
-		
+
 		return view;
 	}
 
@@ -108,22 +108,22 @@ public class CrimeListFragment extends ListFragment {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) { //menu items
 		switch (item.getItemId()) {
-			case R.id.menu_item_new_crime:
-				addNewCrime();
-				return true;
-			case R.id.menu_item_show_subtitle:
-				if (getActivity().getActionBar().getSubtitle() == null) {
-					getActivity().getActionBar().setSubtitle(R.string.subtitle);	
-					item.setTitle(R.string.hide_subtitle);
-					mSubtitleVisible = true;
-				} else {
-					getActivity().getActionBar().setSubtitle(null);
-					item.setTitle(R.string.show_subtitle);
-					mSubtitleVisible = false;
-				}
-				return true;
-			default:
-				return super.onOptionsItemSelected(item);
+		case R.id.menu_item_new_crime:
+			addNewCrime();
+			return true;
+		case R.id.menu_item_show_subtitle:
+			if (getActivity().getActionBar().getSubtitle() == null) {
+				getActivity().getActionBar().setSubtitle(R.string.subtitle);	
+				item.setTitle(R.string.hide_subtitle);
+				mSubtitleVisible = true;
+			} else {
+				getActivity().getActionBar().setSubtitle(null);
+				item.setTitle(R.string.show_subtitle);
+				mSubtitleVisible = false;
+			}
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
 		}
 	}
 
@@ -155,14 +155,14 @@ public class CrimeListFragment extends ListFragment {
 			return convertView;
 		}
 	}
-	
+
 	private void addNewCrime() {
 		Crime crime = new Crime();
 		CrimeLab.getInstance(getActivity()).addCrime(crime);
-		
+
 		Intent intent = new Intent(getActivity(), CrimePagerActivity.class);
 		intent.putExtra(CrimeFragment.EXTRA_CRIME_ID, crime.getId());
-		
+
 		startActivityForResult(intent, 0);
 	}
 }

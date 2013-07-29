@@ -24,6 +24,7 @@ public final class R {
         public static final int gradients=0x7f020000;
         public static final int ic_launcher=0x7f020001;
         public static final int ic_menu_add=0x7f020002;
+        public static final int paper_texture=0x7f020003;
     }
     public static final class id {
         public static final int crime_date=0x7f050005;
@@ -57,19 +58,20 @@ public final class R {
         public static final int app_name=0x7f060000;
         public static final int crime_details_label=0x7f060004;
         public static final int crime_solved_label=0x7f060005;
+        public static final int crime_title_default=0x7f060006;
         public static final int crime_title_hint=0x7f060002;
         public static final int crime_title_label=0x7f060003;
-        public static final int crimes_title=0x7f060006;
-        public static final int date_picker_title=0x7f060007;
-        public static final int delete_crime=0x7f06000f;
-        public static final int hide_subtitle=0x7f06000d;
-        public static final int new_crime=0x7f06000b;
-        public static final int no_crimes=0x7f060010;
-        public static final int set_time_picker_prompt=0x7f06000a;
-        public static final int show_subtitle=0x7f06000c;
-        public static final int subtitle=0x7f06000e;
-        public static final int time_picker_button=0x7f060009;
-        public static final int time_picker_title=0x7f060008;
+        public static final int crimes_title=0x7f060007;
+        public static final int date_picker_title=0x7f060008;
+        public static final int delete_crime=0x7f060010;
+        public static final int hide_subtitle=0x7f06000e;
+        public static final int new_crime=0x7f06000c;
+        public static final int no_crimes=0x7f060011;
+        public static final int set_time_picker_prompt=0x7f06000b;
+        public static final int show_subtitle=0x7f06000d;
+        public static final int subtitle=0x7f06000f;
+        public static final int time_picker_button=0x7f06000a;
+        public static final int time_picker_title=0x7f060009;
         public static final int title_activity_crime=0x7f060001;
     }
     public static final class style {

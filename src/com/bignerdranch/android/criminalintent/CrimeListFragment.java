@@ -4,8 +4,10 @@ import java.util.ArrayList;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -21,12 +23,15 @@ public class CrimeListFragment extends ListFragment {
 	private ArrayList<Crime> mCrimes;
 
 	private static final String TAG = "CrimeListFragment";
+	private boolean mSubtitleVisible;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setHasOptionsMenu(true); //Lets the FragmentManager know that CrimeListFragment needs to receive options menu callbacks.
-
+		setRetainInstance(true); //retain fragment data in between rotations
+		mSubtitleVisible = false;
+		
 		getActivity().setTitle(R.string.crimes_title);
 		//getActivity() is a convenience method provided by list fragment that returns the activity hosting this fragment
 
@@ -34,6 +39,20 @@ public class CrimeListFragment extends ListFragment {
 
 		CrimeAdapter adapter = new CrimeAdapter(mCrimes);
 		setListAdapter(adapter); //ListFragment convenience method that sets an adapter of the implicit ListView managed by CrimeListFragment
+	}
+
+	@TargetApi(11)
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		View view = super.onCreateView(inflater, container, savedInstanceState);
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+			if (mSubtitleVisible) {
+				getActivity().getActionBar().setSubtitle(R.string.subtitle);
+			}
+		}
+		
+		return view;
 	}
 
 	@Override
@@ -77,9 +96,11 @@ public class CrimeListFragment extends ListFragment {
 				if (getActivity().getActionBar().getSubtitle() == null) {
 					getActivity().getActionBar().setSubtitle(R.string.subtitle);	
 					item.setTitle(R.string.hide_subtitle);
+					mSubtitleVisible = true;
 				} else {
 					getActivity().getActionBar().setSubtitle(null);
 					item.setTitle(R.string.show_subtitle);
+					mSubtitleVisible = false;
 				}
 				return true;
 			default:

@@ -24,7 +24,7 @@ public class CrimeLab {
 		mSerializer = new CriminalIntentJSONSerializer(mAppContext, FILENAME);
 		
 		try {
-			mCrimes = mSerializer.loadCrimes();
+			mCrimes = mSerializer.loadCrimesExternal();
 		} catch (Exception e) {
 			mCrimes = new ArrayList<Crime>();
 			Log.e(TAG, "Error loading crimes: ", e);
@@ -59,7 +59,7 @@ public class CrimeLab {
 	
 	public boolean saveCrimes() {
 		try {
-			mSerializer.saveCrimes(mCrimes);
+			mSerializer.saveCrimesExternal(mCrimes);
 			Log.d(TAG, "crimes saved to file.");
 			return true;
 		} catch (Exception e) {

@@ -33,10 +33,12 @@ public class CrimeLab {
 
 	public void addCrime(Crime crime) {
 		mCrimes.add(crime);
+		saveCrimes();
 	}
 	
 	public void deleteCrime(Crime crime) {
 		mCrimes.remove(crime);
+		saveCrimes();
 	}
 	
 	public static CrimeLab getInstance(Context c) {

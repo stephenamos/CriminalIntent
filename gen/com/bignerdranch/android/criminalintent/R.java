@@ -21,10 +21,11 @@ public final class R {
         public static final int activity_vertical_margin=0x7f040001;
     }
     public static final class drawable {
-        public static final int gradients=0x7f020000;
-        public static final int ic_launcher=0x7f020001;
-        public static final int ic_menu_add=0x7f020002;
-        public static final int paper_texture=0x7f020003;
+        public static final int background_activated=0x7f020000;
+        public static final int gradients=0x7f020001;
+        public static final int ic_launcher=0x7f020002;
+        public static final int ic_menu_add=0x7f020003;
+        public static final int paper_texture=0x7f020004;
     }
     public static final class id {
         public static final int add_new_crime_button=0x7f05000a;

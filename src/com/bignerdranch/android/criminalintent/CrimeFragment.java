@@ -130,13 +130,13 @@ public class CrimeFragment extends Fragment {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode != Activity.RESULT_OK) { 
-			openTimePickerDialog();
-		}
 		if (requestCode == REQUEST_DATE) {
 			Date date = (Date) data.getSerializableExtra(DatePickerFragment.EXTRA_DATE);
 			mCrime.setDate(date);
 			updateButtonData();
+			if (resultCode != Activity.RESULT_OK) { 
+				openTimePickerDialog();
+			}
 		}
 	}
 

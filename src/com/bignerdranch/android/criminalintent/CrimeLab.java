@@ -35,6 +35,10 @@ public class CrimeLab {
 		mCrimes.add(crime);
 	}
 	
+	public void deleteCrime(Crime crime) {
+		mCrimes.remove(crime);
+	}
+	
 	public static CrimeLab getInstance(Context c) {
 
 		if (sCrimeLab == null) {

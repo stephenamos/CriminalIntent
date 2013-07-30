@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -76,7 +78,10 @@ public class CrimeListFragment extends ListFragment {
 				getActivity().getActionBar().setSubtitle(R.string.subtitle);
 			}
 		}
-
+		
+		ListView listView = (ListView) view.findViewById(android.R.id.list);
+		registerForContextMenu(listView); //Registers context menu to the list view
+		
 		return view;
 	}
 
@@ -98,11 +103,23 @@ public class CrimeListFragment extends ListFragment {
 	}
 
 	@Override
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+		getActivity().getMenuInflater().inflate(R.menu.crime_list_item_context, menu);
+	}
+
+	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.fragment_crime_list, menu);
 
 	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		return super.onContextItemSelected(item);
+	}
+	
 
 	@TargetApi(11)
 	@Override

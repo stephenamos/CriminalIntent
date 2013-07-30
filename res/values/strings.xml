@@ -24,5 +24,7 @@
     <string name="delete_crime">Delete</string>
     
     <string name="no_crimes">There are currently no entries.  You should make one!</string>
+    <string name="no_crimes_hint">Hint: Click the </string>
+    <string name="no_crimes_hint2">  at the top or click the new crime button.</string>
     
 </resources>

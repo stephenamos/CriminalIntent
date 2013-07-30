@@ -4,9 +4,15 @@ import java.util.ArrayList;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ImageSpan;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
@@ -15,12 +21,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TextView.BufferType;
 
 public class CrimeListFragment extends ListFragment {
 
@@ -49,40 +57,97 @@ public class CrimeListFragment extends ListFragment {
 	@TargetApi(11)
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		View view;
-		if (mCrimes.size() == 0) {
-			view = inflater.inflate(R.layout.fragment_crimelist, container, false);	
+		View view = inflater.inflate(R.layout.fragment_crimelist, container, false);	
 
-			mAddCrimeButton = (Button) view.findViewById(R.id.empty_list_button);
-			mAddCrimeButton.setVisibility(View.VISIBLE);
-			mAddCrimeButton.setEnabled(true);
+		mAddCrimeButton = (Button) view.findViewById(R.id.add_new_crime_button);
+		mAddCrimeButton.setOnClickListener(new View.OnClickListener() {
 
-			mAddCrimeButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				addNewCrime();
+			}
+		});
 
-				@Override
-				public void onClick(View v) {
-					addNewCrime();
-				}
-			});
+		//Displays a hint that tells the user to click the new crime button at the top or in the middle of the screen.
+		//The spannable object allows one to insert a bitmap image in between strings of text.
+		String hint1 = getActivity().getResources().getString(R.string.no_crimes_hint);
+		String hint2 = getActivity().getResources().getString(R.string.no_crimes_hint2);
+		String spannableLocation = " ";
+		String finalHint = hint1 + spannableLocation + hint2;
 
-		} else {
-			//			View view = super.onCreateView(inflater, container, savedInstanceState);
-			view = inflater.inflate(R.layout.fragment_crimelist, container, false);	
-
-			mAddCrimeButton = (Button) view.findViewById(R.id.empty_list_button);
-			mAddCrimeButton.setVisibility(View.GONE);
-			mAddCrimeButton.setEnabled(false);
-		}
+		TextView emptyListTextView = (TextView) view.findViewById(R.id.empty_list_hint_textview);
+		SpannableStringBuilder ssb = new SpannableStringBuilder(finalHint);
+		Bitmap addCrimeIcon = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_menu_add);
+		ssb.setSpan(new ImageSpan(getActivity(), addCrimeIcon), hint1.length(), finalHint.indexOf(hint2), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+		emptyListTextView.setText(ssb, BufferType.SPANNABLE);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (mSubtitleVisible) {
 				getActivity().getActionBar().setSubtitle(R.string.subtitle);
 			}
 		}
-		
+
 		ListView listView = (ListView) view.findViewById(android.R.id.list);
-		registerForContextMenu(listView); //Registers context menu to the list view
-		
+
+		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+			//Use floating context menus on Froyo and Gingerbread
+			registerForContextMenu(listView); //Registers context menu to the list view	
+		} else {
+			//Use contextual action bar on Honeycomb and Higher
+			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
+
+				@Override
+				public boolean onPrepareActionMode(ActionMode arg0, Menu arg1) {
+					//Required but not used in this implementation.
+					return false;
+				}
+
+				@Override
+				public void onDestroyActionMode(ActionMode arg0) {
+					// TODO Auto-generated method stub
+
+				}
+
+				//ActionMode.Callback methods
+				@Override
+				public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+					MenuInflater inflater = mode.getMenuInflater();
+					inflater.inflate(R.menu.crime_list_item_context, menu);
+
+					return true;
+				}
+
+				@Override
+				public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+					switch (item.getItemId()) {
+					case R.id.menu_item_delete_crime:
+						CrimeAdapter adapter = (CrimeAdapter) getListAdapter();
+						CrimeLab crimeLab = CrimeLab.getInstance(getActivity());
+						for (int i = adapter.getCount() - 1; i >= 0; i--) {
+							if (getListView().isItemChecked(i)) {
+								crimeLab.deleteCrime(adapter.getItem(i));
+							}
+						}
+						mode.finish();
+						adapter.notifyDataSetChanged();
+
+						return true;
+					default: 
+						return false;
+
+					}
+				}
+
+				@Override
+				public void onItemCheckedStateChanged(ActionMode mode, int position,
+						long id, boolean checked) {
+					// Required but not used in this implementation.
+
+				}
+			});
+		}
+
 		return view;
 	}
 
@@ -114,24 +179,24 @@ public class CrimeListFragment extends ListFragment {
 		inflater.inflate(R.menu.fragment_crime_list, menu);
 
 	}
-	
+
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 		int position = info.position;
 		CrimeAdapter adapter = (CrimeAdapter) getListAdapter();
 		Crime crime = adapter.getItem(position);
-		
+
 		switch (item.getItemId()) {
 		case R.id.menu_item_delete_crime:
 			CrimeLab.getInstance(getActivity()).deleteCrime(crime);
 			adapter.notifyDataSetChanged();
 			return true;
 		}
-		
+
 		return super.onContextItemSelected(item);
 	}
-	
+
 
 	@TargetApi(11)
 	@Override

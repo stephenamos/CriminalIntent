@@ -64,7 +64,7 @@ public class CriminalIntentJSONSerializer {
 		Writer writer = null;
 		try {
 			String root = Environment.getExternalStorageDirectory().toString();
-			if (!root.isEmpty() && root != null) {
+			if (!(root.length() == 0) && root != null) {
 				//This will get the SD Card directory and create a folder in it.
 				File sdCard = Environment.getExternalStorageDirectory();
 				File directory = new File(sdCard.getAbsolutePath() + "/CriminalIntent");
@@ -117,7 +117,7 @@ public class CriminalIntentJSONSerializer {
 	
 	public ArrayList<Crime> loadCrimesExternal() throws IOException, JSONException {
 		String root = Environment.getExternalStorageDirectory().toString();
-		if (!root.isEmpty() && root != null) {
+		if (!(root.length() == 0) && root != null) {
 			ArrayList<Crime> crimes = new ArrayList<Crime>();
 			BufferedReader reader = null;
 			try {

@@ -77,7 +77,7 @@ public class CrimeLab {
 
 	private void renameEmptyTitles() {
 		for (Crime crime : mCrimes) {
-			if (crime.getTitle() == null || crime.getTitle().isEmpty() || crime.getTitle().length() == 0) {
+			if (crime.getTitle() == null || crime.getTitle().equals("") || crime.getTitle().length() == 0) {
 				crime.setTitle(mAppContext.getResources().getString(R.string.crime_title_default));
 			}
 		}

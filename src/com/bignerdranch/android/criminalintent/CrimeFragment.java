@@ -43,6 +43,8 @@ public class CrimeFragment extends Fragment {
 	private Button mDateButton;
 	private Button mTimeButton;
 	private CheckBox mSolvedCheckBox;
+	
+	private AlertDialog mAlertDialog;
 
 	public static CrimeFragment newInstance(UUID crimeId) {
 		Bundle args = new Bundle();
@@ -166,9 +168,10 @@ public class CrimeFragment extends Fragment {
 			}
 		case R.id.menu_item_delete_crime:
 			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-			    @Override
+
+				@Override
 			    public void onClick(DialogInterface dialog, int which) {
-			        switch (which){
+			        switch (which) {
 			        case DialogInterface.BUTTON_POSITIVE:
 			        	CrimeLab.getInstance(getActivity()).deleteCrime(mCrime);
 			        	getActivity().finish(); //Kill this fragment and activity
@@ -181,17 +184,34 @@ public class CrimeFragment extends Fragment {
 			};
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+			builder
+				.setMessage("Are you sure?")
+				.setPositiveButton("Yes", dialogClickListener)
+				.setNegativeButton("No", dialogClickListener);
+			mAlertDialog = builder.create();
+			mAlertDialog.show();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
 	
+	@Override
+	public void onDestroy() {
+		if (mAlertDialog != null) {
+			mAlertDialog.dismiss();
+		}
+		super.onDestroy();
+	}
+	
 	
 	
 	@Override
 	public void onPause() {
+		if (mAlertDialog != null) {
+			mAlertDialog.dismiss();
+		}
+		
 		super.onPause();
 		CrimeLab.getInstance(getActivity()).saveCrimes();
 	}

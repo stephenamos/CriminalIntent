@@ -4,7 +4,10 @@ import java.util.Date;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Build;
@@ -15,6 +18,8 @@ import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -53,8 +58,10 @@ public class CrimeFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		UUID crimeId = (UUID) getArguments().getSerializable(EXTRA_CRIME_ID);
-		mCrime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
+		setRetainInstance(true); //retain fragment data in between rotations
 		setHasOptionsMenu(true); //Tells this fragment it has an options menu (Or in this case, an up button in the action bar)
+		
+		mCrime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
 	}
 
 	@TargetApi(11)
@@ -68,6 +75,8 @@ public class CrimeFragment extends Fragment {
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);	
 			}
 		}
+		
+		
 
 		mTitleField = (EditText) v.findViewById(R.id.crime_title);
 		mTitleField.setText(mCrime.getTitle());
@@ -127,6 +136,13 @@ public class CrimeFragment extends Fragment {
 
 		return v;
 	}
+	
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		inflater.inflate(R.menu.fragment_crime, menu);
+
+	}
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -148,10 +164,31 @@ public class CrimeFragment extends Fragment {
 				NavUtils.navigateUpFromSameTask(getActivity());
 				return true;
 			}
+		case R.id.menu_item_delete_crime:
+			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+			    @Override
+			    public void onClick(DialogInterface dialog, int which) {
+			        switch (which){
+			        case DialogInterface.BUTTON_POSITIVE:
+			        	CrimeLab.getInstance(getActivity()).deleteCrime(mCrime);
+			        	getActivity().finish(); //Kill this fragment and activity
+			            break;
+			        case DialogInterface.BUTTON_NEGATIVE:
+			            //No button clicked
+			            break;
+			        }
+			    }
+			};
+
+			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+			builder.setMessage("Are you sure?").setPositiveButton("Yes", dialogClickListener).setNegativeButton("No", dialogClickListener).show();
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	
 	
 	@Override
 	public void onPause() {

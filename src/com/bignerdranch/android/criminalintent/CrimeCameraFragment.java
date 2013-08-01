@@ -1,6 +1,7 @@
 package com.bignerdranch.android.criminalintent;
 
 import java.io.IOException;
+import java.util.List;
 
 import android.hardware.Camera;
 import android.hardware.Camera.Size;
@@ -64,15 +65,15 @@ public class CrimeCameraFragment extends Fragment {
 			}
 			
 			@Override
-			public void surfaceChanged(SurfaceHolder holder, int format, int width,
-					int height) {
+			public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
 				if (mCamera == null) {
 					return;
 				}
 				
 				//The surface has changed size; update the camera preview size
 				Camera.Parameters parameters = mCamera.getParameters();
-				Size size = null; // To be reset in the next section
+				//Really: Size size = CrimeCameraFragment.this.getBestSupportedSize(parameters.getSupportedPreviewSizes(), width, height) ;
+				Size size = getBestSupportedSize(parameters.getSupportedPreviewSizes(), width, height);
 				parameters.setPreviewSize(size.width, size.height);
 				mCamera.setParameters(parameters);
 				try {
@@ -108,7 +109,26 @@ public class CrimeCameraFragment extends Fragment {
 		}
 	}
 	
-	
+	/**
+	 * A simple algorithm to get the largest valid camera preview image size available.
+	 * For a more robust version, see CameraPreview.java in the ApiDemos sample app from android.
+	 * 
+	 * @author BigNerdRanch - Android Programming
+	 */
+	private Size getBestSupportedSize(List<Size> sizes, int width, int height) {
+		Size bestSize = sizes.get(0);
+		int largestArea = bestSize.width * bestSize.height;
+		
+		for (Size size : sizes) {
+			int area = size.width * size.height;
+			if (area > largestArea) {
+				bestSize = size;
+				largestArea = area;
+			}
+		}
+		
+		return bestSize;
+	}
 	
 	
 

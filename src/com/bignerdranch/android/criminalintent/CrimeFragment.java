@@ -4,12 +4,11 @@ import java.util.Date;
 import java.util.UUID;
 
 import android.annotation.TargetApi;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -29,6 +28,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
+import android.widget.ImageButton;
 
 public class CrimeFragment extends Fragment {
 
@@ -43,8 +43,10 @@ public class CrimeFragment extends Fragment {
 	private Button mDateButton;
 	private Button mTimeButton;
 	private CheckBox mSolvedCheckBox;
-	
+
 	private AlertDialog mAlertDialog;
+
+	private ImageButton mPhotoButton;
 
 	public static CrimeFragment newInstance(UUID crimeId) {
 		Bundle args = new Bundle();
@@ -62,7 +64,7 @@ public class CrimeFragment extends Fragment {
 		UUID crimeId = (UUID) getArguments().getSerializable(EXTRA_CRIME_ID);
 		setRetainInstance(true); //retain fragment data in between rotations
 		setHasOptionsMenu(true); //Tells this fragment it has an options menu (Or in this case, an up button in the action bar)
-		
+
 		mCrime = CrimeLab.getInstance(getActivity()).getCrime(crimeId);
 	}
 
@@ -77,8 +79,8 @@ public class CrimeFragment extends Fragment {
 				getActivity().getActionBar().setDisplayHomeAsUpEnabled(true);	
 			}
 		}
-		
-		
+
+
 
 		mTitleField = (EditText) v.findViewById(R.id.crime_title);
 		mTitleField.setText(mCrime.getTitle());
@@ -136,9 +138,26 @@ public class CrimeFragment extends Fragment {
 
 		});
 
+		mPhotoButton = (ImageButton) v.findViewById(R.id.crime_imagebutton);
+		mPhotoButton.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(getActivity(), CrimeCameraActivity.class);
+				startActivity(intent);
+			}
+		});
+
+		//If camera is not available, disable camera functionality by greying out button and disabling it
+		PackageManager packageManager = getActivity().getPackageManager();
+		if (!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA) && 
+				!packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FRONT)) {
+			mPhotoButton.setEnabled(false);
+		}
+
 		return v;
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
@@ -170,24 +189,24 @@ public class CrimeFragment extends Fragment {
 			DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
 
 				@Override
-			    public void onClick(DialogInterface dialog, int which) {
-			        switch (which) {
-			        case DialogInterface.BUTTON_POSITIVE:
-			        	CrimeLab.getInstance(getActivity()).deleteCrime(mCrime);
-			        	getActivity().finish(); //Kill this fragment and activity
-			            break;
-			        case DialogInterface.BUTTON_NEGATIVE:
-			            //No button clicked
-			            break;
-			        }
-			    }
+				public void onClick(DialogInterface dialog, int which) {
+					switch (which) {
+					case DialogInterface.BUTTON_POSITIVE:
+						CrimeLab.getInstance(getActivity()).deleteCrime(mCrime);
+						getActivity().finish(); //Kill this fragment and activity
+						break;
+					case DialogInterface.BUTTON_NEGATIVE:
+						//No button clicked
+						break;
+					}
+				}
 			};
 
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			builder
-				.setMessage("Are you sure?")
-				.setPositiveButton("Yes", dialogClickListener)
-				.setNegativeButton("No", dialogClickListener);
+			.setMessage("Are you sure?")
+			.setPositiveButton("Yes", dialogClickListener)
+			.setNegativeButton("No", dialogClickListener);
 			mAlertDialog = builder.create();
 			mAlertDialog.show();
 			return true;
@@ -195,7 +214,7 @@ public class CrimeFragment extends Fragment {
 			return super.onOptionsItemSelected(item);
 		}
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		if (mAlertDialog != null) {
@@ -203,15 +222,15 @@ public class CrimeFragment extends Fragment {
 		}
 		super.onDestroy();
 	}
-	
-	
-	
+
+
+
 	@Override
 	public void onPause() {
 		if (mAlertDialog != null) {
 			mAlertDialog.dismiss();
 		}
-		
+
 		super.onPause();
 		CrimeLab.getInstance(getActivity()).saveCrimes();
 	}
@@ -227,5 +246,5 @@ public class CrimeFragment extends Fragment {
 		dialog.show(fm, DIALOG_TIME);
 
 	}
-	
+
 }

@@ -182,7 +182,10 @@ public class CrimeFragment extends Fragment {
 			//Create a new photo object and attach it to the crime
 			String filename = data.getStringExtra(CrimeCameraFragment.EXTRA_PHOTO_FILENAME);
 			if (filename != null) {
-				Log.i(TAG, "filename : " + filename);
+				Photo photo = new Photo(filename);
+				mCrime.setPhoto(photo);
+
+				Log.i(TAG, "Crime : " + mCrime.getTitle() + " has a photo with filename: " + filename);
 			}
 		}
 	}

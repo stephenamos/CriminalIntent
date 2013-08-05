@@ -27,6 +27,9 @@
     <string name="no_crimes_hint">Hint: Click the </string>
     <string name="no_crimes_hint2">  at the top or click the new crime button.</string>
     
+    <string name="crime_imagebutton_description">Take a picture</string>
+    <string name="crime_imageView_description">Preview Image</string>
+    
     <string name="take">Take!</string>
     
 </resources>

@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -32,11 +33,14 @@ import android.widget.ImageButton;
 
 public class CrimeFragment extends Fragment {
 
+	private static final String TAG = "CrimeFragment";
+	
 	public static final String EXTRA_CRIME_ID = "com.bignerdranch.android.criminalintent.crime_id";
 	public static final String DIALOG_DATE = "date";
 	public static final String DIALOG_TIME = "time";
 
 	private static final int REQUEST_DATE = 0;
+	private static final int REQUEST_PHOTO = 1;
 
 	private Crime mCrime;
 	private EditText mTitleField;
@@ -144,7 +148,7 @@ public class CrimeFragment extends Fragment {
 			@Override
 			public void onClick(View v) {
 				Intent intent = new Intent(getActivity(), CrimeCameraActivity.class);
-				startActivity(intent);
+				startActivityForResult(intent, REQUEST_PHOTO);
 			}
 		});
 
@@ -173,6 +177,12 @@ public class CrimeFragment extends Fragment {
 			updateButtonData();
 			if (resultCode != Activity.RESULT_OK) { 
 				openTimePickerDialog();
+			}
+		} else if (requestCode == REQUEST_PHOTO) {
+			//Create a new photo object and attach it to the crime
+			String filename = data.getStringExtra(CrimeCameraFragment.EXTRA_PHOTO_FILENAME);
+			if (filename != null) {
+				Log.i(TAG, "filename : " + filename);
 			}
 		}
 	}

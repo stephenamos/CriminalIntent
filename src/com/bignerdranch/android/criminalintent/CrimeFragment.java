@@ -30,6 +30,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class CrimeFragment extends Fragment {
 
@@ -51,6 +52,7 @@ public class CrimeFragment extends Fragment {
 	private AlertDialog mAlertDialog;
 
 	private ImageButton mPhotoButton;
+	private ImageView mPhotoView;
 
 	public static CrimeFragment newInstance(UUID crimeId) {
 		Bundle args = new Bundle();
@@ -159,6 +161,8 @@ public class CrimeFragment extends Fragment {
 			mPhotoButton.setEnabled(false);
 		}
 
+		mPhotoView = (ImageView) v.findViewById(R.id.crime_imageView);
+		
 		return v;
 	}
 

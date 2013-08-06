@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
+import android.text.Spanned;
 import android.text.style.ImageSpan;
 import android.view.ActionMode;
 import android.view.ContextMenu;
@@ -78,7 +79,7 @@ public class CrimeListFragment extends ListFragment {
 		TextView emptyListTextView = (TextView) view.findViewById(R.id.empty_list_hint_textview);
 		SpannableStringBuilder ssb = new SpannableStringBuilder(finalHint);
 		Bitmap addCrimeIcon = BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.ic_menu_add);
-		ssb.setSpan(new ImageSpan(getActivity(), addCrimeIcon), hint1.length(), finalHint.indexOf(hint2), Spannable.SPAN_INCLUSIVE_INCLUSIVE);
+		ssb.setSpan(new ImageSpan(getActivity(), addCrimeIcon), hint1.length(), finalHint.indexOf(hint2), Spanned.SPAN_INCLUSIVE_INCLUSIVE);
 		emptyListTextView.setText(ssb, BufferType.SPANNABLE);
 
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -94,7 +95,7 @@ public class CrimeListFragment extends ListFragment {
 			registerForContextMenu(listView); //Registers context menu to the list view	
 		} else {
 			//Use contextual action bar on Honeycomb and Higher
-			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			listView.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
 			listView.setMultiChoiceModeListener(new AbsListView.MultiChoiceModeListener() {
 
 				@Override

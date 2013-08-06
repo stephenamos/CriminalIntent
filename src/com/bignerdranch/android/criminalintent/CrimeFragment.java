@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -165,7 +166,33 @@ public class CrimeFragment extends Fragment {
 		
 		return v;
 	}
+	
+	/**
+	 * Sets a scaled image on the camera preview ImageView.
+	 */
+	private void showPhoto() {
+		//Sets or resets the image button's image based on the photo taken.
+		Photo photo = mCrime.getPhoto();
+		BitmapDrawable bitmapDrawable = null;
+		if (bitmapDrawable != null) {
+			String path = getActivity().getFileStreamPath(photo.getFilename()).getAbsolutePath();
+			bitmapDrawable = PictureUtils.getScaledDrawable(getActivity(), path);
+		}
+		mPhotoView.setImageDrawable(bitmapDrawable);
+	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		showPhoto();
+	}
+	
+	@Override
+	public void onStop() {
+		super.onStop();
+		PictureUtils.cleanImageView(mPhotoView); //Clean up imageView memory when activity is stopped
+	}
+	
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
@@ -190,6 +217,7 @@ public class CrimeFragment extends Fragment {
 				mCrime.setPhoto(photo);
 
 				Log.i(TAG, "Crime : " + mCrime.getTitle() + " has a photo with filename: " + filename);
+				showPhoto();
 			}
 		}
 	}
@@ -263,5 +291,5 @@ public class CrimeFragment extends Fragment {
 		dialog.show(fm, DIALOG_TIME);
 
 	}
-
+	
 }

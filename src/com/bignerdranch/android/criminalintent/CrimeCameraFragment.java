@@ -4,6 +4,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.UUID;
 
 import android.app.Activity;
 import android.content.Context;
@@ -44,7 +45,7 @@ public class CrimeCameraFragment extends Fragment {
 		@Override
 		public void onPictureTaken(byte[] data, Camera camera) {
 			// Create a filename
-			String filename = "Criminal Intent " + Calendar.getInstance().getTime() + ".jpg";
+			String filename = UUID.randomUUID().toString() + ".jpg";
 			//Save the jpeg data to disk
 			FileOutputStream outputStream = null;
 			boolean success = true;

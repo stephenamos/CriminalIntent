@@ -174,7 +174,7 @@ public class CrimeFragment extends Fragment {
 		//Sets or resets the image button's image based on the photo taken.
 		Photo photo = mCrime.getPhoto();
 		BitmapDrawable bitmapDrawable = null;
-		if (bitmapDrawable != null) {
+		if (photo != null) {
 			String path = getActivity().getFileStreamPath(photo.getFilename()).getAbsolutePath();
 			bitmapDrawable = PictureUtils.getScaledDrawable(getActivity(), path);
 		}
